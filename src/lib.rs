@@ -285,7 +285,7 @@ impl<T> Router<T> {
     }
 
     /// Match a route on the router.
-    pub fn recognize(&self, mut path: &str) -> Result<Match<&T>, String> {
+    pub fn recognize(&mut self, mut path: &str) -> Result<Match<&mut T>, String> {
         if !path.is_empty() && path.as_bytes()[0] == b'/' {
             path = &path[1..];
         }
@@ -306,7 +306,7 @@ impl<T> Router<T> {
                     }
                 }
 
-                let handler = self.handlers.get(&nfa_match.state).unwrap();
+                let handler = self.handlers.get_mut(&nfa_match.state).unwrap();
                 Ok(Match::new(handler, map))
             }
             Err(str) => Err(str),
